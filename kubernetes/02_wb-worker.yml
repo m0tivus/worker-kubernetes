@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wb-worker-deployment
+  namespace: workers
   labels:
     app: wb-worker
 spec:
@@ -15,8 +16,16 @@ spec:
         app: wb-worker
     spec:
       containers:
-      - name: worker-node
-        image: motivus/worker:1.0.0
+      - name: worker-node        
+        image: sa-saopaulo-1.ocir.io/idhkis4m3p5e/prd01worker-kubernetes:1.0.0
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 50m
+            memory: 2Gi
+          requests:
+            cpu: 50m
+            memory: 2Gi
         env:
           - name: REACT_APP_API_HOST
             valueFrom:
@@ -28,3 +37,6 @@ spec:
               configMapKeyRef:
                 name: wb-worker-config
                 key: wb-api-tls
+      imagePullSecrets:
+        - name: ocirsecret
+
