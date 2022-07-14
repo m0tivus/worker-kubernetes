@@ -1,0 +1,50 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: "2022-07-14T15:27:30Z"
+  name: wb-worker-deployment
+  namespace: workers
+  resourceVersion: "10337184"
+  uid: 7b75b30c-49b8-4747-af0d-ba5dfbdfb7ef
+spec:
+  maxReplicas: 1000
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 70
+        type: Utilization
+    type: Resource
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: wb-worker-deployment
+status:
+  conditions:
+  - lastTransitionTime: "2022-07-14T15:27:45Z"
+    message: recommended size matches current size
+    reason: ReadyForNewScale
+    status: "True"
+    type: AbleToScale
+  - lastTransitionTime: "2022-07-14T16:44:41Z"
+    message: the HPA was able to successfully calculate a replica count from cpu resource
+      utilization (percentage of request)
+    reason: ValidMetricFound
+    status: "True"
+    type: ScalingActive
+  - lastTransitionTime: "2022-07-14T16:35:09Z"
+    message: the desired count is within the acceptable range
+    reason: DesiredWithinRange
+    status: "False"
+    type: ScalingLimited
+  currentMetrics:
+  - resource:
+      current:
+        averageUtilization: 70
+        averageValue: 35m
+      name: cpu
+    type: Resource
+  currentReplicas: 65
+  desiredReplicas: 65
+  lastScaleTime: "2022-07-14T16:44:41Z"
