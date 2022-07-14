@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wb-worker-deployment
+  labels:
+    app: wb-worker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wb-worker
+  template:
+    metadata:
+      labels:
+        app: wb-worker
+    spec:
+      containers:
+      - name: worker-node
+        image: motivus/worker:1.0.0
+        env:
+          - name: REACT_APP_API_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: wb-worker-config
+                key: wb-api-host
+          - name: REACT_APP_TLS
+            valueFrom:
+              configMapKeyRef:
+                name: wb-worker-config
+                key: wb-api-tls

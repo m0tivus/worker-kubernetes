@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wb-worker-config
+data:
+  wb-api-tls: "true"
+  wb-api-host: waterbear.api.motivus.cl
