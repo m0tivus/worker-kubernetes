@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  worker-kubernetes:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: worker-kubernetes:1.0.0
+    environment:
+      - WB_API_TLS=true
+      - WB_API_HOST=waterbear.api.motivus.cl
+    

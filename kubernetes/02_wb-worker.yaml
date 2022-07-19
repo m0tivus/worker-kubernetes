@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: wb-worker
+  namespace: workers
+spec:
+  selector:
+    matchLabels:
+      app: wb-worker 
+  serviceName: "wb-worker"
+  replicas: 3 
+  template:
+    metadata:
+      labels:
+        app: wb-worker # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: wb-worker
+        image: sa-santiago-1.ocir.io/axyvvilklpqv/prd01worker-kubernetes:1.0.0       
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 50m
+            memory: 2Gi
+          requests:
+            cpu: 50m
+            memory: 2Gi
+        env:
+          - name: REACT_APP_API_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: wb-worker-config
+                key: wb-api-host
+          - name: REACT_APP_TLS
+            valueFrom:
+              configMapKeyRef:
+                name: wb-worker-config
+                key: wb-api-tls
+      imagePullSecrets:
+        - name: ocirsecret

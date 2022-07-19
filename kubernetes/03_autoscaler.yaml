@@ -1,0 +1,12 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: wb-worker-hpa
+spec:
+  maxReplicas: 1000
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: wb-worker
+  targetCPUUtilizationPercentage: 70
