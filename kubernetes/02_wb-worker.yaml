@@ -1,23 +1,23 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: wb-worker-deployment
+  name: wb-worker
   namespace: workers
-  labels:
-    app: wb-worker
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: wb-worker
+      app: wb-worker 
+  serviceName: "wb-worker"
+  replicas: 3 
   template:
     metadata:
       labels:
-        app: wb-worker
+        app: wb-worker # has to match .spec.selector.matchLabels
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
-      - name: worker-node        
-        image: sa-saopaulo-1.ocir.io/idhkis4m3p5e/prd01worker-kubernetes:1.0.0
+      - name: wb-worker
+        image: sa-santiago-1.ocir.io/axyvvilklpqv/prd01worker-kubernetes:1.0.0       
         imagePullPolicy: Always
         resources:
           limits:
@@ -39,4 +39,3 @@ spec:
                 key: wb-api-tls
       imagePullSecrets:
         - name: ocirsecret
-
